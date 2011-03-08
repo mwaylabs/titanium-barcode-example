@@ -1,38 +1,69 @@
-// this sets the background color of the master UIView (when there are no windows/tab groups on it)
+// this sets the background color of the master UIView
 Titanium.UI.setBackgroundColor('#000');
 
-// open a single window
-var window = Ti.UI.createWindow({
-    backgroundColor:'white'
-  });
-
-var label = Ti.UI.createLabel();
-window.add(label);
-window.open();
-
+// load module
 var titaniumBarcode = require('com.mwaysolutions.barcode');
 
-titaniumBarcode.scan({
-    success:function(data) {
-      if(data && data.barcode) {
-        var label = Titanium.UI.createLabel({
-            text:'Barcode: ' + data.barcode,
-            textAlign:'center',
-            width:'auto'
-          });
+// create tab group
+var tabGroup = Titanium.UI.createTabGroup({id:'tabGroup1'});
+var win1 = Ti.UI.createWindow({ backgroundColor:'white' });
 
-        window.add(label);
-      } else {
-        alert(JSON.stringify(data));
-      }
-    },
-
-    error:function(err) { 
-      alert("Error!! " + err); 
-    },
-
-    cancel:function() { 
-      alert("cancel"); 
-    }
+var tab1 = Titanium.UI.createTab({
+    id: 'Tab1',
+    title: 'Tab1',
+    window: win1
   });
 
+var barcodeLabel = Titanium.UI.createLabel({
+    color: '#000',
+    top: 60,
+    text: 'Barcode: N/A',
+    textAlign: 'center',
+    font: { fontSize:48 },
+    width: 'auto'
+  });
+
+win1.add(barcodeLabel);
+
+var barcodeButton = Titanium.UI.createButton({
+    title: 'Scan barcode',
+    top: 200
+  });
+
+barcodeButton.addEventListener('click', function (e) {
+    titaniumBarcode.scan({
+        success: function (data) {
+          if(data && data.barcode) {
+            barcodeLabel.text = 'Barcode:' + data.barcode;
+          } else {
+            alert(JSON.stringify(data));
+          }
+        },
+
+        error: function (err) {
+          alert('Error while scanning: ' + err);
+        },
+
+        cancel: function () {
+          alert('Scan cancelled');
+        }
+      });
+
+  });
+
+win1.add(barcodeButton);
+
+var win2 = Ti.UI.createWindow({
+    backgroundColor:'black'
+  });
+
+var tab2 = Titanium.UI.createTab({
+    id:'tab2',
+    title: 'Tab2',
+    window:win2
+  });
+
+//  add tabs
+tabGroup.addTab(tab1);
+tabGroup.addTab(tab2);
+tabGroup.open();

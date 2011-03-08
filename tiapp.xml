@@ -5,7 +5,7 @@
 <version>1.1</version>
 <publisher>M-WAY Solutions GmbH</publisher>
 <url>http://www.mwaysolutions.com</url>
-<description>Example barcode applicatito</description>
+<description>Example barcode applicatiton</description>
 <copyright>2011 by M-WAY Solutions GmbH</copyright>
 <icon>default_app_logo.png</icon>
   <persistent-wifi>false</persistent-wifi>
